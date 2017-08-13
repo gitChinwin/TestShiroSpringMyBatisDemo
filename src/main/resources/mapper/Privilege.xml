@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chinwin.demo.pojo.Privilege" >
+
+	<select id="findPrivilegeByRoleId" parameterType="java.lang.Integer" resultType="cn.chinwin.demo.pojo.Privilege">
+		SELECT P.PRIID AS priid,P.PRI_NAME AS priName,P.PRI_URL AS priUrl,P.PRI_IMAGE AS priImage,
+		P.PARENTID AS parentid,P.PRI_STATUS AS priStatus,P.PRI_DESC AS priDesc,P.PRI_HTML AS priHtml
+		FROM PRIVILEGE P,PRI_ROLE_RELAX X
+		WHERE P.PRIID = X.PRIID AND X.ROLEID = #{roleid}
+	</select>
+
+	<select id="findAllPrivilege" resultType="cn.chinwin.demo.pojo.Privilege">
+		SELECT PRIID AS priid,PRI_NAME AS priName,PRI_URL AS priUrl,PRI_IMAGE AS priImage,
+		PARENTID AS parentid,PRI_STATUS AS priStatus,PRI_DESC AS priDesc ,PRI_HTML AS priHtml
+		FROM PRIVILEGE
+	</select>
+
+	<select id="findAllUrl" resultType="java.lang.String">
+		SELECT PRI_URL AS priUrl FROM PRIVILEGE
+	</select>
+	
+</mapper>

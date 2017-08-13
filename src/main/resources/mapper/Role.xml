@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chinwin.demo.pojo.Role">
+
+    <select id="findRoleByRoleId" resultMap="roleInfo" parameterType="java.lang.Integer">
+		SELECT ROLEID,ROLE_CN,ROLE_EN,ROLE_DESC,ROLE_STATUS
+		FROM ROLE WHERE ROLEID = #{roleid}
+	</select>
+
+    <resultMap id="roleInfo" type="cn.chinwin.demo.pojo.Role">
+        <id property="roleid" column="ROLEID"/>
+        <result property="roleCn" column="ROLE_CN"/>
+        <result property="roleEn" column="ROLE_EN"/>
+        <result property="roleDesc" column="ROLE_DESC"/>
+        <result property="roleStatus" column="ROLE_STATUS"/>
+        <collection property="priList" column="ROLEID" javaType="java.util.ArrayList"
+                    ofType="cn.chinwin.demo.pojo.Privilege"
+                    select="cn.chinwin.demo.pojo.Privilege.findPrivilegeByRoleId"/>
+    </resultMap>
+
+    <select id="findRoleByDeptno" resultType="cn.chinwin.demo.pojo.Role">
+        SELECT R.ROLEID,R.ROLE_CN AS roleCn,R.ROLE_EN AS roleEn,R.ROLE_DESC AS roleDesc,R.ROLE_STATUS AS roleStatus
+        FROM ROLE R,USERS X
+        WHERE
+        X.USERID != #{userid}
+        AND R.ROLEID = X.ROLEID AND R.ROLEID !=1 AND R.ROLE_STATUS = 0
+        <if test="userid!=1">AND X.DEPTNO = #{deptno} </if>
+        GROUP BY R.ROLEID
+    </select>
+
+
+</mapper>

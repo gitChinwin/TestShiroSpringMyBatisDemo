@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chinwin.demo.pojo.Users">
+
+    <select id="isLogin" resultMap="userInfo" parameterType="cn.chinwin.demo.pojo.Users">
+		SELECT USERID,LOGINNAME,LOGINPWD,REALNAME,EMAIL,USER_DESC,USER_STATUS,DEPTNO,ROLEID
+		FROM USERS WHERE LOGINNAME=#{loginName} AND LOGINPWD = #{loginPwd}
+	</select>
+
+    <resultMap id="userInfo" type="cn.chinwin.demo.pojo.Users">
+        <id property="userId" column="USERID"/>
+        <result property="loginName" column="LOGINNAME"/>
+        <result property="loginPwd" column="LOGINPWD"/>
+        <result property="realName" column="REALNAME"/>
+        <result property="email" column="EMAIL"/>
+        <result property="userDesc" column="USER_DESC"/>
+        <result property="userStatus" column="USER_STATUS"/>
+        <association property="dept" column="DEPTNO" select="cn.chinwin.demo.pojo.Dept.findDeptByDeptno"/>
+        <association property="role" column="ROLEID" select="cn.chinwin.demo.pojo.Role.findRoleByRoleId"/>
+    </resultMap>
+
+    <select id="getUserSplit" resultMap="userSplit" parameterType="java.util.Map">
+        SELECT USERID,LOGINNAME,LOGINPWD,REALNAME,EMAIL,USER_DESC,USER_STATUS,DEPTNO,ROLEID
+        FROM USERS WHERE USERID!=#{userid} AND USERID!= 1
+        <if test="userid!=1">AND DEPTNO=#{deptno}</if>
+        LIMIT #{start},#{ps}
+    </select>
+
+    <resultMap id="userSplit" type="cn.chinwin.demo.pojo.Users">
+        <id property="userId" column="USERID"/>
+        <result property="loginName" column="LOGINNAME"/>
+        <result property="loginPwd" column="LOGINPWD"/>
+        <result property="realName" column="REALNAME"/>
+        <result property="email" column="EMAIL"/>
+        <result property="userDesc" column="USER_DESC"/>
+        <result property="userStatus" column="USER_STATUS"/>
+        <result property="roleId" column="ROLEID"/>
+        <association property="dept" column="DEPTNO" select="cn.chinwin.demo.pojo.Dept.findDeptByDeptno"/>
+    </resultMap>
+
+    <select id="getCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT COUNT(USERID) FROM USERS WHERE USERID!=#{userid} AND USERID!= 1
+        <if test="userid!=1">AND DEPTNO=#{deptno}</if>
+    </select>
+
+    <update id="changeRole" parameterType="java.util.Map" >
+        UPDATE USERS SET ROLEID = #{roleid} WHERE USERID = #{userid}
+    </update>
+
+
+</mapper>

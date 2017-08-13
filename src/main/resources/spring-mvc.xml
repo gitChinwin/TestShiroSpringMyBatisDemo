@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config/>
+    <mvc:annotation-driven />
+    <context:component-scan base-package="cn.chinwin.demo">
+        <context:exclude-filter type="annotation"
+                                expression="org.springframework.stereotype.Service"/>
+    </context:component-scan>
+
+    <bean id="resourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <mvc:resources mapping="/js/**" location="/js/"/>
+    <mvc:resources mapping="/css/**" location="/css/"/>
+    <!--配置静态资源-->
+    <mvc:default-servlet-handler/>
+
+
+    <!-- 配置登录拦截器 和 权限拦截器-->
+    <mvc:interceptors>
+        <!--登录拦截器-->
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean id="myLoginInterceptor" class="cn.chinwin.demo.utils.LoginInterceptor" />
+        </mvc:interceptor>
+        <!--权限拦截器-->
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean id="myPrivilegeInterceptor" class="cn.chinwin.demo.utils.PrivilegeInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+</beans>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chinwin.demo.pojo.Dept" >
+
+	<select id="findDeptByDeptno" parameterType="java.lang.Integer" resultType="cn.chinwin.demo.pojo.Dept">
+		select deptno,dname,dept_desc as deptDesc from dept where deptno=#{deptno}
+	</select>
+	
+	
+</mapper>
