@@ -31,4 +31,9 @@ public class RoleDaoImpl implements IRoleDao {
 
         return session.selectList("cn.chinwin.demo.pojo.Role.roleSplit", map);
     }
+
+    @Override
+    public int getCount() {
+        return session.selectOne("cn.chinwin.demo.pojo.Role.getCount");
+    }
 }

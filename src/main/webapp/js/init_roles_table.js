@@ -66,8 +66,9 @@ $(function () {
                 field: '',
                 align: 'center',
                 formatter: function (value, row, index) {//自定义显示可以写标签哦~
+                    var stringify = JSON.stringify(row);
                     return "<button type='button'  data-toggle='modal' data-target='#myModal' " +
-                        "data-rid='" + row.roleid + "' data-name='" + row.roleCn + "'>" +
+                        "data-row='" + stringify + "'>" +
                         "操作" +
                         "</button>";
                 }
@@ -81,18 +82,17 @@ $(function () {
         console.log("load success");
         $(".pull-right").css("display", "block");
     });
-    $('#myModal').on('show.bs.modal', function (e) {
-        var button = $(e.relatedTarget); // 触发事件的按钮
-        var rid = button.data('rid'); // 解析出whatever内容
-        var name = button.data("name");
-        $("#changedUserId").val(uid);
-        $("#changeLoginName").val(name);
-        getRoles(rid);//调用getRoles()
+    $('#myModal').on('show.bs.modal', function (e) {//模态框弹出时触发
+        var button = $(e.relatedTarget); // 触发此事件的按钮
+        var row = button.data('row'); // 解析出whatever内容
+
+
+        // getRoles(rid);//调用getRoles()
     });
 
 });
 
-//模态框弹出时事件触发时进入此函数
+
 function getRoles(rid) {
     //去sessionStorage查是否有用户，若无，跳转登录页
     var item = sessionStorage.getItem("user");
@@ -159,3 +159,5 @@ function changeRole() {
 
     $.ajax(setting);
 }
+
+

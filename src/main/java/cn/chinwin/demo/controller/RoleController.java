@@ -5,9 +5,9 @@ import cn.chinwin.demo.pojo.TableSplitResult;
 import cn.chinwin.demo.pojo.Users;
 import cn.chinwin.demo.service.IRoleService;
 import com.alibaba.fastjson.JSON;
-import org.omg.CORBA.INTERNAL;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -18,12 +18,13 @@ import java.util.List;
 public class RoleController {
 
 
-    @Resource(name="roleServiceImpl")
+    @Resource(name = "roleServiceImpl")
     private IRoleService roleService;
 
 
-    @RequestMapping("getRoleSplit")
-    public String getRoleSplit(Integer cp, Integer ps, HttpSession session){
+    @RequestMapping(value = "getRoleSplit", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String getRoleSplit(Integer cp, Integer ps, HttpSession session) {
         if (cp == null) {
             cp = 0;
         }
@@ -31,15 +32,14 @@ public class RoleController {
             ps = 5;
         }
         Users user = (Users) session.getAttribute("users");
-        if(user.getRole()==null||user.getRole().getRoleid()==null){
-            return JSON.toJSONString(new TableSplitResult(0,0,null));
+        if (user.getRole() == null || user.getRole().getRoleid() == null) {
+            return JSON.toJSONString(new TableSplitResult(0, 0, null));
         }
         List<Role> roleSplit = roleService.getRoleSplit(cp, ps);
+        int count = roleService.getCount();
 
-
-        return "";
+        return JSON.toJSONString(new TableSplitResult<>(cp, count, roleSplit));
     }
-
 
 
 }

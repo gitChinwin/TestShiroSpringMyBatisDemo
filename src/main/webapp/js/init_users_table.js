@@ -91,9 +91,7 @@ $(function () {
     $('#myModal').on('show.bs.modal', function (e) {
         var button = $(e.relatedTarget); // 触发事件的按钮
         var row = button.data("row"); // 解析出whatever内容
-        // console.log(row.userId);
-        // console.log(row.loginName);
-        // console.log(row.roleId);
+
         //为模态框的input赋值
         $("#changedUserId").val(row.userId);
         $("#changeLoginName").val(row.loginName);

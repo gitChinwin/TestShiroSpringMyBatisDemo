@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="lib/bootstrap_treeview/css/bootstrap-treeview.css">
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.js"></script>
+    <script src="lib/bootstrap_treeview/js/bootstrap-treeview.js"></script>
+
+</head>
+<body>
+
+
+<div id="tree"></div>
+
+
+<script type="text/javascript">
+
+
+//    $(function () {
+//        $('#tree').treeview({
+//            data: treeData
+//
+//        });
+//    });
+    var dataInfo = [
+        {
+            text: "第一中学",
+            nodes: [
+                {
+                    text: "高一年级",
+                    nodes: [
+                        {
+                            text: "一班",
+                            nodes: [
+                                {
+                                    text: "三组",//
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    text: "高二年级",
+                    nodes: [
+                        {
+                            text: "一班",
+                            nodes: [
+                                {
+                                    text: "一组",
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    text: "高三年级",
+                    nodes: ""
+                }
+            ]
+        }
+    ];
+</script>
+
+<script type="text/javascript">
+
+
+    $(function () {
+
+//        $.ajax({
+//            url: "/common/menu/test",
+//            type: "GET",
+//            async: true,
+//            cache: false,
+//            contentType: "application/json; charset=UTF-8",
+//            success: function (data) {
+//                var dataInfo = data;   // 数据格式是固定的，可以从后台拼成固定的json串
+                var checkableTree = $('#tree').treeview({
+                    data: dataInfo,
+                    showIcon: false,
+                    showCheckbox: true,
+                    onNodeChecked: function (event, data) {
+                        //选中父节点，则自动选择子节点
+                        if (data.nodes != null) {
+                            var arrayInfo = data.nodes;
+                            for (var i = 0; i < arrayInfo.length; i++) {
+                                // $('#treeview1').treeview('checkNode', [ arrayInfo[i].nodeId, { silent: true } ]);
+                                $('#tree').treeview('toggleNodeChecked', [arrayInfo[i].nodeId, {silent: true}]);
+                            }
+                        }
+                    },
+                    onNodeUnchecked: function (event, data) {
+                        /* $('#checkable-output').prepend('<p>' + node.text + ' was unchecked</p>');*/
+                        //取消选中父节点，则自动取消选择子节点
+                        if (data.nodes != null) {
+                            var arrayInfo = data.nodes;
+                            for (var i = 0; i < arrayInfo.length; i++) {
+                                // $('#treeview1').treeview('checkNode', [ arrayInfo[i].nodeId, { silent: true } ]);
+                                $('#tree').treeview('toggleNodeChecked', [arrayInfo[i].nodeId, {silent: true}]);
+                            }
+                        }
+                    }
+
+                });
+
+//
+//            }
+//        });
+    });
+</script>
+
+
+</body>
+</html>

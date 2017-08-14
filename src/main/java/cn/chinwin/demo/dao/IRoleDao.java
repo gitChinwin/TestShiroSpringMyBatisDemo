@@ -12,4 +12,6 @@ public interface IRoleDao {
     List<Role> findRoleByDeptno(int userid,int deptno);
 
     List<Role> roleSplit(int start ,int ps);
+
+    int getCount();
 }

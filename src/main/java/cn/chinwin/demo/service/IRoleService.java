@@ -12,4 +12,6 @@ public interface IRoleService {
 
 
     List<Role> getRoleSplit(int start, int ps);
+
+    int getCount();
 }
