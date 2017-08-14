@@ -73,8 +73,8 @@ $(function () {
                 align: 'center',
                 formatter: function (value, row, index) {//自定义显示可以写标签哦~
                     var stringify = JSON.stringify(row);
-                    return "<button type='button'  data-toggle='modal' data-target='#myModal' " +
-                        "data-row='" + stringify + "'>" +
+                    return "<button type='button' class='btn-primary' data-toggle='modal' data-target='#myModal' " +
+                        "data-row='" + stringify + " '>" +
                         "操作" +
                         "</button>";
                 }
@@ -90,8 +90,8 @@ $(function () {
     });
     $('#myModal').on('show.bs.modal', function (e) {
         var button = $(e.relatedTarget); // 触发事件的按钮
-        var row = button.data("row"); // 解析出whatever内容
-
+        var paaaa = button.data("row"); // 解析出whatever内容
+        var row = JSON.parse(paaaa);
         //为模态框的input赋值
         $("#changedUserId").val(row.userId);
         $("#changeLoginName").val(row.loginName);
@@ -102,11 +102,16 @@ $(function () {
         for (var i = 0; i < $changeStatus.length; i++) {
             var $op = $changeStatus[i];
             var value = $op.value;
-            if(value==row.userStatus){
-                $op.setAttribute("selected","selected");//此处用原生js设置属性= =，不知道为啥jQuery会报错
+            if (value == row.userStatus) {
+                $op.setAttribute("selected", "selected");//此处用原生js设置属性= =，不知道为啥jQuery会报错
             }
         }
-        $("#changeDeptno").val(row.dept.dname);
+        if (row.dept != null && row.dept.dname != null) {
+            $("#changeDeptno").val(row.dept.dname);
+        }else{
+            $("#changeDeptno").val("空");
+        }
+
         getRoles(row.roleId);//调用getRoles()去后台查岗位
     });
 
@@ -151,7 +156,7 @@ function getRoles(rid) {
 }
 
 //模态框确定按钮事件触发函数
-function changeRole() {
+function changeUser() {
 
     var serialize = $("#changeRoleForm").serialize();
     var uid = $("#changedUserId").val();

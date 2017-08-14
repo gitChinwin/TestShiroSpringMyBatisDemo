@@ -1,6 +1,7 @@
 package cn.chinwin.demo.service;
 
 
+import cn.chinwin.demo.pojo.BootStrapTree;
 import cn.chinwin.demo.pojo.Role;
 
 import java.util.List;
@@ -14,4 +15,6 @@ public interface IRoleService {
     List<Role> getRoleSplit(int start, int ps);
 
     int getCount();
+
+
 }

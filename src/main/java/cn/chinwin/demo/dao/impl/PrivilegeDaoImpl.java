@@ -23,4 +23,9 @@ public class PrivilegeDaoImpl implements IPrivilegeDao{
     public List<String> findAllUrl() {
         return session.selectList("cn.chinwin.demo.pojo.Privilege.findAllUrl");
     }
+
+    @Override
+    public List<Privilege> findPriByRoleid(int roleid) {
+        return session.selectList("cn.chinwin.demo.pojo.Privilege.findPrivilegeByRoleId",roleid);
+    }
 }

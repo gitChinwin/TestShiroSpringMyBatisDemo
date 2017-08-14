@@ -12,4 +12,6 @@ public interface IPrivilegeDao {
     List<Privilege> findAllPrivilege();
 
     List<String> findAllUrl();
+
+    List<Privilege> findPriByRoleid(int roleid);
 }
