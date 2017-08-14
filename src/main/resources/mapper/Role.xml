@@ -29,4 +29,14 @@
     </select>
 
 
+    <select id="roleSplit" parameterType="java.util.Map" resultType="cn.chinwin.demo.pojo.Role">
+        SELECT ROLEID AS roleid,ROLE_CN AS roleCn,ROLE_EN AS roleEn,ROLE_DESC AS roleDesc,
+        ROLE_STATUS AS roleStatus FROM ROLE WHERE ROLEID!=1
+        LIMIT #{start},#{ps}
+    </select>
+
+    <select id="getCount" resultType="java.lang.Integer">
+        SELECT COUNT(ROLEID) FROM ROLE WHERE ROLEID!=1
+    </select>
+
 </mapper>

@@ -40,11 +40,8 @@ public class UserDaoImpl implements IUserDao {
     }
 
     @Override
-    public boolean changeRoleFormUsers(Integer userid, Integer roleid) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("userid", userid);
-        map.put("roleid", roleid);
-        int update = session.update("cn.chinwin.demo.pojo.Users.changeRole", map);
+    public boolean updataUser(Users user) {
+        int update = session.update("cn.chinwin.demo.pojo.Users.changeRole", user);
         return update > 0 ;
     }
 }

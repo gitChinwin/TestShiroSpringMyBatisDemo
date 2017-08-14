@@ -16,5 +16,5 @@ public interface IUserService {
 
     Result getRolesByDept(Users user);
 
-    Result changeRole(Users user, Integer userid, Integer roleid);
+    Result changeRole(Users user,Users changUser);
 }

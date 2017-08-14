@@ -59,26 +59,29 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
-    public Result changeRole(Users user, Integer userid, Integer roleid) {
+    public Result changeRole(Users user, Users changUser) {
         Result result = null;
         if (user.getUserId() == null || user.getDept() == null || user.getDept().getDeptno() == null) {
             return new Result<Role>(0, "no parameter enough !", null);
         }
         List<Role> roles = roleDao.findRoleByDeptno(user.getUserId(), user.getDept().getDeptno());
-        if (!isContains(roles, roleid)) {
-            return new Result<Role>(0,"no privilege enough !",null);
+        if (!isContains(roles, changUser.getRoleId())) {
+            return new Result<Role>(0, "no privilege enough !", null);
         }
-        boolean flag = userDao.changeRoleFormUsers(userid, roleid);
-        if(flag){
-            result = new Result(1,"suc",null);
-        }else {
-            result = new Result(0,"服务器跑到火星啦!",null);
+        boolean flag = userDao.updataUser(changUser);
+        if (flag) {
+            result = new Result(1, "suc", null);
+        } else {
+            result = new Result(0, "服务器跑到火星啦!", null);
         }
         return result;
     }
 
     private boolean isContains(List<Role> list, Integer roleid) {
         for (Role role : list) {
+            if (role == null) {
+                continue;
+            }
             if (roleid.equals(role.getRoleid())) {
                 return true;
             }

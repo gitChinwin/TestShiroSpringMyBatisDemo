@@ -68,13 +68,12 @@ public class UserController {
 
     @RequestMapping(value = "changeRole", produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String changeRole(Integer userid, Integer roleid, HttpSession session) {
-        Result result;
-        if(userid==null||roleid==null){
-            result = new Result(0,"no parameter enough !",null);
+    public String changeRole(Users changUser, HttpSession session) {
+        if (changUser.getUserId() == null) {
+            return JSON.toJSONString(new Result(0, "no parameter enough !", null));
         }
         Users user = (Users) session.getAttribute("users");
-        result = userService.changeRole(user, userid, roleid);
+        Result result = userService.changeRole(user, changUser);
         return JSON.toJSONString(result);
     }
 }

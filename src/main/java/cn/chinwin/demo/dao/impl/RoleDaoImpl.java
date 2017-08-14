@@ -22,4 +22,13 @@ public class RoleDaoImpl implements IRoleDao {
         map.put("deptno", deptno);
         return session.selectList("cn.chinwin.demo.pojo.Role.findRoleByDeptno", map);
     }
+
+    @Override
+    public List<Role> roleSplit(int start, int ps) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("start", start);
+        map.put("ps", ps);
+
+        return session.selectList("cn.chinwin.demo.pojo.Role.roleSplit", map);
+    }
 }

@@ -15,6 +15,6 @@ public interface IUserDao {
 
     int getCount(int userid, int deptno);
 
-    boolean changeRoleFormUsers(Integer userid,Integer roleid);
+    boolean updataUser(Users user);
 
 }

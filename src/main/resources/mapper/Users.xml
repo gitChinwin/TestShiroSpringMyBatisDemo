@@ -43,8 +43,14 @@
         <if test="userid!=1">AND DEPTNO=#{deptno}</if>
     </select>
 
-    <update id="changeRole" parameterType="java.util.Map" >
-        UPDATE USERS SET ROLEID = #{roleid} WHERE USERID = #{userid}
+    <update id="changeRole" parameterType="cn.chinwin.demo.pojo.Users" >
+        UPDATE USERS
+        <set>
+            <if test="roleId!=null"> ROLEID = #{roleId}, </if>
+            <if test="email!=null"> EMAIL = #{email}, </if>
+            <if test="userStatus!=null"> USER_STATUS = #{userStatus} </if>
+        </set>
+        WHERE USERID = #{userId}
     </update>
 
 
