@@ -14,4 +14,6 @@ public interface IRoleDao {
     List<Role> roleSplit(int start ,int ps);
 
     int getCount();
+
+    int updateRole(Role role);
 }

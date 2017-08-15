@@ -16,5 +16,5 @@ public interface IRoleService {
 
     int getCount();
 
-
+    boolean updateRole(Role role);
 }

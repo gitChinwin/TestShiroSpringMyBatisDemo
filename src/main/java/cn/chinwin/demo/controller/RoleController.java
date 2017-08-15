@@ -6,6 +6,7 @@ import cn.chinwin.demo.service.IRoleService;
 import cn.chinwin.demo.utils.TreeViewUtil;
 import com.alibaba.fastjson.JSON;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -26,9 +27,9 @@ public class RoleController {
     private IPrivilegeService privilegeService;
 
 
-    @RequestMapping(value = "getRoleSplit", produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "getRoleSplit")
     @ResponseBody
-    public String getRoleSplit(Integer cp, Integer ps, HttpSession session) {
+    public TableSplitResult getRoleSplit(Integer cp, Integer ps, HttpSession session) {
         if (cp == null) {
             cp = 0;
         }
@@ -37,25 +38,52 @@ public class RoleController {
         }
         Users user = (Users) session.getAttribute("users");
         if (user.getRole() == null || user.getRole().getRoleid() == null) {
-            return JSON.toJSONString(new TableSplitResult(0, 0, null));
+            return new TableSplitResult(0, 0, null);
         }
         List<Role> roleSplit = roleService.getRoleSplit(cp, ps);
         int count = roleService.getCount();
 
-        return JSON.toJSONString(new TableSplitResult<>(cp, count, roleSplit));
+        return new TableSplitResult<>(cp, count, roleSplit);
     }
 
-    @RequestMapping(value = "preChangePri",produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "preChangePri")
     @ResponseBody
-    public String preChangePri( ){
+    public List<BootStrapTree> preChangePri() {
 
         List<Privilege> privilegeList = privilegeService.getAllPrivilege();
         List<BootStrapTree> bsTrees = TreeViewUtil.translateToBootStrapTree(privilegeList);
 //        HashMap<String, Object> map = new HashMap<>();
 //        map.put("nodes",bsTrees);
-        String s = JSON.toJSONString(bsTrees);
-        System.out.println(s);
-        return s;
+
+        return bsTrees;
     }
 
+    @RequestMapping(value = "updateRole")
+    @ResponseBody
+    public String updateRole(@RequestBody Role role) {
+        System.out.println("...");
+        if (role != null) {
+            List<Privilege> priList = role.getPriList();
+            for (Privilege privilege : priList) {
+                System.out.println(privilege.getPriid());
+            }
+        }
+        return "suc";
+    }
+
+    @RequestMapping(value = "changeRoleStatus")
+    @ResponseBody
+    public Result changeRoleStatus(@RequestBody Role role) {
+        Result result;
+        if(role.getRoleid()==null){
+            result = new Result(0,"参数不足！",null);
+        }
+        boolean flag = roleService.updateRole(role);
+        if(flag){
+            result = new Result(1,"suc",null);
+        }else{
+            result = new Result(0,"nullPointException",null);
+        }
+        return result;
+    }
 }

@@ -9,9 +9,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.util.List;
 
-/**
- * Created by chinwin on 2017/8/10.
- */
+
 public class WebApplicationListener implements ServletContextListener{
 
     @Override

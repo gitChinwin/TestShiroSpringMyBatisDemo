@@ -9,7 +9,7 @@ import java.util.List;
 public class BootStrapTree implements Serializable{
 
     private String text;
-
+    private Integer priid;
     private List<BootStrapTree> nodes;
 
     public String getText() {
@@ -26,5 +26,13 @@ public class BootStrapTree implements Serializable{
 
     public void setNodes(List<BootStrapTree> nodes) {
         this.nodes = nodes;
+    }
+
+    public Integer getPriid() {
+        return priid;
+    }
+
+    public void setPriid(Integer priid) {
+        this.priid = priid;
     }
 }

@@ -18,7 +18,7 @@ $(function () {
         paginationNextText: '&rsaquo;',//指定分页条中下一页按钮的图标或文字,这里是>
         // singleSelect: false,//设置True 将禁止多选
         search: false, //显示搜索框
-        data_local: "zh-US",//表格汉化
+        data_local: "zh-CN",//表格汉化
         sidePagination: "server", //服务端处理分页
         queryParams: function (params) {//自定义参数，这里的参数是传给后台的，我这是是分页用的
             return {//这里的params是table提供的

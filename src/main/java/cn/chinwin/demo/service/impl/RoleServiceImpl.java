@@ -7,6 +7,7 @@ import cn.chinwin.demo.pojo.Privilege;
 import cn.chinwin.demo.pojo.Role;
 import cn.chinwin.demo.service.IRoleService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -18,7 +19,6 @@ public class RoleServiceImpl implements IRoleService {
     private IRoleDao roleDao;
 
 
-
     @Override
     public List<Role> getRoleSplit(int start, int ps) {
         return roleDao.roleSplit(start, ps);
@@ -27,6 +27,12 @@ public class RoleServiceImpl implements IRoleService {
     @Override
     public int getCount() {
         return roleDao.getCount();
+    }
+
+    @Override
+    @Transactional
+    public boolean updateRole(Role role) {
+        return roleDao.updateRole(role) > 0;
     }
 
 

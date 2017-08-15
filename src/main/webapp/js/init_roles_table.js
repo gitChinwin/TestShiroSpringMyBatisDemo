@@ -7,7 +7,7 @@ $(function () {
         striped: true,//设置为 true 会有隔行变色效果
         undefinedText: "空",//当数据为 undefined 时显示的字符
         pagination: true, //分页
-        // paginationLoop:true,//设置为 true 启用分页条无限循环的功能。
+        // paginationLoop:false,//设置为 true 启用分页条无限循环的功能。
         showToggle: "true",//是否显示 切换试图（table/card）按钮
         showColumns: "true",//是否显示 内容列下拉框
         pageNumber: 1,//如果设置了分页，首页页码
@@ -18,7 +18,7 @@ $(function () {
         paginationNextText: '&rsaquo;',//指定分页条中下一页按钮的图标或文字,这里是>
         singleSelect: false,//设置True 将禁止多选
         search: false, //显示搜索框
-        data_local: "zh-US",//表格汉化
+        data_local: "zh-CN",//表格汉化
         sidePagination: "server", //服务端处理分页
         queryParams: function (params) {//自定义参数，这里的参数是传给后台的，我这是是分页用的
             return {//这里的params是table提供的
@@ -67,7 +67,22 @@ $(function () {
                 align: 'center',
                 formatter: function (value, row, index) {//自定义显示可以写标签哦~
                     var stringify = JSON.stringify(row);
-                    return "<button type='button' class='btn-primary' data-toggle='modal' data-target='#myModal' " +
+                    var str = "";
+                    if (row.roleStatus == 0) {
+                        str = "<button type='button' class='btn-danger' style='margin-right: 5px' " +
+                            " value='" + row.roleStatus + "' data-rid='" + row.roleid + "' onclick=changeStatus(this) >" +
+                            "禁用" +
+                            "</button>"
+                    } else {
+                        str = "<button type='button' class='btn-success' style='margin-right: 5px' " +
+                            " value='" + row.roleStatus + "' data-rid='" + row.roleid + "' onclick=changeStatus(this) >" +
+                            "启用" +
+                            "</button>"
+                    }
+
+
+                    return str +
+                        "<button type='button' class='btn-primary' data-toggle='modal' data-target='#myModal' " +
                         "data-row='" + stringify + "'>" +
                         "操作" +
                         "</button>";
@@ -110,13 +125,14 @@ function getPris(row) {
     if (user == null || (current_uid = user.userId) == null) {
         window.location.href = "sign-in.html";
     }
-
+    var treeData;
     var setting = {
         url: "rc/preChangePri",
         type: "post",
         data: "",
         async: false,
         success: function (dataInfo) {
+            treeData = dataInfo;
             var checkableTree = $('#tree').treeview({
                 data: dataInfo,
                 // color:'#ee9a00',
@@ -177,55 +193,144 @@ function getPris(row) {
         }
     };
     $.ajax(setting);
+    // treeData
 
-
-
-
-        var pl = row.priList;
-        var $lis = $("#tree li");
-        for (var i = 0; i < $lis.length; i++) {
-            var $li = $lis[i];
-            var attribute = $li.getAttribute("data-nodeid");
-            var text = $li.innerText;
-            for (var j = 0; j < pl.length; j++) {
-                var p = pl[j];
-                if (p.priName == text) {
-                    var node = $('#tree').treeview('getNode', attribute);
-                    $('#tree').treeview('checkNode', [node, {silent: true}]);
-                }
+    //当前岗位已有的权限设置checked
+    var pl = row.priList;
+    var $lis = $("#tree li");
+    for (var i = 0; i < $lis.length; i++) {
+        var li = $lis[i];
+        var attribute = $(li).attr("data-nodeid");
+        var text = $(li).text();
+        for (var j = 0; j < pl.length; j++) {
+            var p = pl[j];
+            if (p.priName == text) {
+                var node = $('#tree').treeview('getNode', attribute);
+                $('#tree').treeview('checkNode', [node, {silent: true}]);
             }
         }
+    }
 
+    initId(treeData, $lis)
 
+}
+
+//给所有的权限菜单附上id,递归方法
+function initId(e, d) {
+    if (e == null || e.length == 0) {
+        return;
+    }
+    for (var i = 0; i < e.length; i++) {
+        var p = e[i];
+        for (var j = 0; j < d.length; j++) {
+            var li = d[j];
+            var a = p.text;
+            var b = $(li).text();
+            if (a == b) {
+                var node = $('#tree').treeview('getNode', $(li).attr("data-nodeid"));
+                node.text = p.text + "<span style='display: none' id='priid'>" + p.priid + "</span>";
+                $('#tree').treeview('enableNode', [node, {silent: true}]);
+            }
+            initId(p.nodes, d);
+        }
+    }
 }
 
 //模态框确定按钮事件触发函数
 function changeRole() {
 
     /*更新完提交树*/
-    $('#saveRole').click(function () {
-        var menuList = new Array();
-        var li = 0;
-        $('#treeview-checkable  li').each(function () {
-            if ($(this).hasClass("list-group-item node-treeview-checkable node-checked")) {
-                menuList[li] = $(this).attr('data-nodeid') + 1;
-                li++;
-            }
-        });
 
-        var data = {roleId: roleId, menuList: menuList};
-        $.ajax({
-            type: "post",
-            url: "/rc/updateRole",
-            data: JSON.stringify(data),
-            dataType: "json",
-            contentType: 'application/json; charset=utf-8',
-            traditional: true,
-            success: function (data) {
-                alert(data);
-            }
-        });
+    var menuList = new Array();
+    var count = 0;
+    var $lis = $("#tree li");
+    for (var i = 0; i < $lis.length; i++) {
+        var li = $lis[i];
+        if ($(li).hasClass("list-group-item node-tree node-checked")) {
+            var priid = $(li).children('span#priid').text();
+            var p = {};
+            p.priid = parseInt(priid);
+            menuList[count] = p;
+            count++;
+        }
+    }
+    // $('#tree  li').each(function () {
+    //     if ($(this).hasClass("list-group-item node-treeview-checkable node-checked")) {
+    //         menuList[li] = $(this).child('#priid span').text();
+    //         li++;
+    //     }
+    // });
+    var role = {};
+    var roleid = $("#changeId").val();
+    role.roleid = parseInt(roleid);
+    role.roleCn = $("#changeRoleCn").val();
+    role.roleEn = $("#changeRoleEn").val();
+    role.priList = menuList;
+
+    $.ajax({
+        type: "post",
+        url: "/rc/updateRole",
+        data: JSON.stringify(role),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            alert(data);
+        },
+        error: function (res) {
+
+        }
     });
+
 }
 
 
+//角色状态的switch开关
+function changeStatus(t) {
+    var role = {};
+    var status = $(t).val();
+    role.roleid = parseInt($(t).data("rid"));
+    var str = "禁用";
+    var value = '0';
+    var cla = "btn-danger";
+    if (status == 0) {
+        str = "启用";
+        value = '1';
+        cla = "btn-success";
+    }
+
+    role.roleStatus = value;
+    $.ajax({
+        type: "post",
+        url: "/rc/changeRoleStatus",
+        data: JSON.stringify(role),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            if (data.code == 1) {
+                $(t).text(str);
+                $(t).val(value);
+                $(t).attr("class", cla);
+                // showTips()
+            } else {
+                alert("msg")
+            }
+        },
+        error: function (res) {
+            console.log(res);
+        }
+    })
+}
+
+//弹框提示逻辑
+function showTips(status, msg, parent) {
+    var $tip = null;
+    if (status) {
+        $tip = $("<div  class=\"alert alert-success alert-dismissable\" style='position: fixed;margin-left: 30%'> <a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>" + msg + "</div>").prependTo(parent);
+    } else {
+        $tip = $("<div  class=\"alert alert-danger alert-dismissable  fade in\" style='position: fixed;margin-left: 30%'> <a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>" + msg + "</div>").prependTo(parent);
+    }
+    setTimeout(function () {
+        this.fadeOut();
+    }.bind($tip), 3000)
+
+}

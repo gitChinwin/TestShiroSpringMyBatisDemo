@@ -25,9 +25,9 @@ public class UserController {
     @Resource(name = "userServiceImpl")
     private IUserService userService;
 
-    @RequestMapping(value = "/checklogin", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/checklogin", method = RequestMethod.POST)
     @ResponseBody
-    public String checklogin(Users user, HttpSession session) {
+    public Result checklogin(Users user, HttpSession session) {
         System.out.println("checklogin...");
         Users u = userService.islogin(user);
         Result result = null;
@@ -37,13 +37,13 @@ public class UserController {
         session.setAttribute("users", u);
         u.setLoginPwd(null);
         result = new Result(1, "suc！", u);
-        return JSON.toJSONString(result);
+        return result;
     }
 
 
-    @RequestMapping(value = "/getUserSplit", produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/getUserSplit")
     @ResponseBody
-    public String getUserSplit(Integer cp, Integer ps, HttpSession session) {
+    public TableSplitResult getUserSplit(Integer cp, Integer ps, HttpSession session) {
         if (cp == null) {
             cp = 0;
         }
@@ -54,26 +54,26 @@ public class UserController {
         List<Users> userlist = userService.getUserSplit(cp, ps, user.getUserId(), user.getDept().getDeptno());
         int count = userService.getCount(user.getUserId(), user.getDept().getDeptno());
         TableSplitResult<List<Users>> result = new TableSplitResult<>(cp, count, userlist);//
-        return JSON.toJSONString(result);
+        return result;
     }
 
-    @RequestMapping(value = "preChangeRole", produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "preChangeRole")
     @ResponseBody
-    public String preChangeRole(HttpSession session) {
+    public Result preChangeRole(HttpSession session) {
 
         Users user = (Users) session.getAttribute("users");
         Result result = userService.getRolesByDept(user);
-        return JSON.toJSONString(result);
+        return result;
     }
 
-    @RequestMapping(value = "changeRole", produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "changeRole")
     @ResponseBody
-    public String changeRole(Users changUser, HttpSession session) {
+    public Result changeRole(Users changUser, HttpSession session) {
         if (changUser.getUserId() == null) {
-            return JSON.toJSONString(new Result(0, "no parameter enough !", null));
+            return new Result(0, "no parameter enough !", null);
         }
         Users user = (Users) session.getAttribute("users");
         Result result = userService.changeRole(user, changUser);
-        return JSON.toJSONString(result);
+        return result;
     }
 }

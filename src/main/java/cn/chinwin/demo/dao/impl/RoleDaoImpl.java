@@ -36,4 +36,9 @@ public class RoleDaoImpl implements IRoleDao {
     public int getCount() {
         return session.selectOne("cn.chinwin.demo.pojo.Role.getCount");
     }
+
+    @Override
+    public int updateRole(Role role) {
+        return session.update("cn.chinwin.demo.pojo.Role.updateRoleCondition",role);
+    }
 }

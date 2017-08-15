@@ -26,7 +26,20 @@
     <mvc:resources mapping="/css/**" location="/css/"/>
     <!--配置静态资源-->
     <mvc:default-servlet-handler/>
-
+    <mvc:annotation-driven>
+        <!--controller接收json数组时需要配-->
+        <mvc:message-converters register-defaults="true">
+            <!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
+            <bean id="fastJsonHttpMessageConverter"
+                  class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 
     <!-- 配置登录拦截器 和 权限拦截器-->
     <mvc:interceptors>

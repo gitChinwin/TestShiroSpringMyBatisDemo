@@ -35,7 +35,16 @@
         LIMIT #{start},#{ps}
     </select>
 
-
+    <update id="updateRoleCondition" parameterType="cn.chinwin.demo.pojo.Role">
+        UPDATE ROlE
+        <set>
+            <if test="roleCn!=null"> role_cn = #{roleCn} ,</if>
+            <if test="roleEn!=null"> role_en = #{roleEn} ,</if>
+            <if test="roleDesc!=null"> role_desc = #{roleDesc} ,</if>
+            <if test="roleStatus!=null"> role_status = #{roleStatus} ,</if>
+        </set>
+        WHERE roleid = #{roleid} and roleid != 1
+    </update>
 
 
 

@@ -148,7 +148,7 @@
             })
         });
         function suc(data) {
-            if (data.code === 1) {
+            if (data.code == 1) {
                 var userStr = JSON.stringify(data.result);
                 sessionStorage.setItem("user", userStr);
 
