@@ -16,5 +16,7 @@ public interface IRoleService {
 
     int getCount();
 
-    boolean updateRole(Role role);
+    boolean updateRoleStatus(Role role) throws RuntimeException;
+
+    boolean updataRoleIncludePrivilege(Role role) throws RuntimeException;
 }

@@ -3,8 +3,45 @@
 <mapper namespace="cn.chinwin.demo.pojo.Dept" >
 
 	<select id="findDeptByDeptno" parameterType="java.lang.Integer" resultType="cn.chinwin.demo.pojo.Dept">
-		select deptno,dname,dept_desc as deptDesc from dept where deptno=#{deptno}
+		SELECT DEPTNO,DNAME,DEPT_DESC AS deptDesc,PARENTID  FROM DEPT WHERE DEPTNO = #{deptno}
 	</select>
-	
+
+	<select id="deptSplit" parameterType="java.util.Map" resultType="cn.chinwin.demo.pojo.Dept">
+		SELECT DEPTNO,DNAME,DEPT_DESC AS deptDesc,PARENTID  FROM DEPT
+		LIMIT #{start},#{ps}
+	</select>
+
+	<select id="findAllDept" resultType="cn.chinwin.demo.pojo.Dept">
+		SELECT DEPTNO,DNAME,DEPT_DESC AS deptDesc,PARENTID  FROM DEPT
+	</select>
+
+	<update id="updateDeptInfo" parameterType="cn.chinwin.demo.pojo.Dept">
+		UPDATE DEPT
+		<set>
+			<if test="dname!=null"> dname = #{dname}, </if>
+			<if test="deptDesc!=null"> DEPT_DESC = #{deptDesc}, </if>
+			<if test="parentid!=null"> parentid = #{parentid}, </if>
+		</set>
+		WHERE deptno = #{deptno}
+	</update>
+
+	<insert id="addDeptInfo" parameterType="cn.chinwin.demo.pojo.Dept">
+		INSERT INTO
+		DEPT(
+		DNAME
+		<if test="deptDesc!=null"> ,DEPT_DESC</if>
+		<if test="parentid!=null"> ,PARENTID</if>
+		)
+		VALUES(
+		#{deptno}
+		<if test="deptDesc!=null"> ,#{deptDesc}</if>
+		<if test="parentid!=null"> ,#{parentid}</if>
+		)
+	</insert>
+
+
+	<select id="getCount" resultType="java.lang.Integer">
+		SELECT COUNT(DEPTNO) FROM DEPT
+	</select>
 	
 </mapper>

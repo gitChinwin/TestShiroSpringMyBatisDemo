@@ -9,6 +9,8 @@ import java.util.List;
  */
 public interface IRoleDao {
 
+    Role findRoleById(Integer roleid);
+
     List<Role> findRoleByDeptno(int userid,int deptno);
 
     List<Role> roleSplit(int start ,int ps);
@@ -16,4 +18,8 @@ public interface IRoleDao {
     int getCount();
 
     int updateRole(Role role);
+
+    int delPriList(Integer roleid);
+
+    int addPrivilege(Integer priid,Integer roleid);
 }

@@ -69,12 +69,12 @@ $(function () {
                     var stringify = JSON.stringify(row);
                     var str = "";
                     if (row.roleStatus == 0) {
-                        str = "<button type='button' class='btn-danger' style='margin-right: 5px' " +
+                        str = "<button type='button' class='btn-danger'  " +
                             " value='" + row.roleStatus + "' data-rid='" + row.roleid + "' onclick=changeStatus(this) >" +
                             "禁用" +
                             "</button>"
                     } else {
-                        str = "<button type='button' class='btn-success' style='margin-right: 5px' " +
+                        str = "<button type='button' class='btn-success'  " +
                             " value='" + row.roleStatus + "' data-rid='" + row.roleid + "' onclick=changeStatus(this) >" +
                             "启用" +
                             "</button>"
@@ -254,17 +254,11 @@ function changeRole() {
             count++;
         }
     }
-    // $('#tree  li').each(function () {
-    //     if ($(this).hasClass("list-group-item node-treeview-checkable node-checked")) {
-    //         menuList[li] = $(this).child('#priid span').text();
-    //         li++;
-    //     }
-    // });
     var role = {};
     var roleid = $("#changeId").val();
     role.roleid = parseInt(roleid);
-    role.roleCn = $("#changeRoleCn").val();
-    role.roleEn = $("#changeRoleEn").val();
+    // role.roleCn = $("#changeRoleCn").val();
+    // role.roleEn = $("#changeRoleEn").val();
     role.priList = menuList;
 
     $.ajax({
@@ -274,10 +268,19 @@ function changeRole() {
         dataType: "json",
         contentType: "application/json;charset=utf-8",
         success: function (data) {
-            alert(data);
+            if (data.code == 0) {
+                $('#myModal').modal('hide');
+                showTips(false,data.msg,$("#table_server"));
+            }else {
+                showTips(true,data.msg,$("#table_server"));
+                $('#myModal').modal('hide');
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000)
+            }
         },
         error: function (res) {
-
+            showTips(false,res.code,$("#table_server"));
         }
     });
 
@@ -310,13 +313,13 @@ function changeStatus(t) {
                 $(t).text(str);
                 $(t).val(value);
                 $(t).attr("class", cla);
-                // showTips()
+                showTips(true,data.msg,$("#table_server"));
             } else {
-                alert("msg")
+                showTips(false,data.msg,$("#table_server"));
             }
         },
         error: function (res) {
-            console.log(res);
+            showTips(false,"error",$("#table_server"));
         }
     })
 }

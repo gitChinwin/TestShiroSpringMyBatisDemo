@@ -34,35 +34,19 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">职员操作</h4>
+                <h4 class="modal-title" id="myModalLabel">部门操作</h4>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <form id="changeRoleForm">
-                        <input type="hidden" name="userId" id="changedUserId">
-
-                        <label for="changeLoginName">职员姓名:</label>
-                        <input type="text" class="form-control" id="changeLoginName" disabled>
+                    <form id="changeDeptForm">
+                        <input type="hidden" id="changedDeptNo" name="deptno">
+                        <label for="changeDeptName">部门名称:</label>
+                        <input type="text" class="form-control" id="changeDeptName" name="dname">
                         <br>
-                        <label for="changeRealName">真实姓名:</label>
-                        <input type="text" class="form-control" id="changeRealName" disabled>
+                        <label for="changeDeptDesc">部门描述:</label>
+                        <input type="text" class="form-control" id="changeDeptDesc" name="deptDesc">
                         <br>
-                        <label for="changeDeptno">部门:</label>
-                        <input type="text" class="form-control" id="changeDeptno" disabled>
-                        <br>
-                        <label for="changeEmail">邮箱:</label>
-                        <input type="email" class="form-control" name="email" id="changeEmail">
-                        <br>
-                        <label for="changeStatus">状态:</label>
-                        <select class="form-control" id="changeStatus" name="userStatus">
-                            <option value="0">正常</option>
-                            <option value="1">请假</option>
-                            <option value="2">离职</option>
-                        </select>
-                        <br>
-
-                        <label for="roleSelect">岗位变更:</label>
-                        <select class="form-control" id="roleSelect" name="roleId">
+                        <select class="form-control" id="deptSelect" name="parentid">
                             <option>1</option>
                             <option>2</option>
                             <option>3</option>
@@ -70,13 +54,12 @@
                         </select>
                         <br>
                         <br>
-                        <br>
                     </form>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="changeUser()">Save changes</button>
+                <button type="button" class="btn btn-primary" onclick="changeDept()">Save changes</button>
             </div>
         </div>
     </div>
@@ -167,12 +150,12 @@
                 </a>
 
                 <ul class="dropdown-menu">
-                    <li><a href="./">My Account</a></li>
+                    <li><a href="WEB-INF">My Account</a></li>
                     <li class="divider"></li>
                     <li class="dropdown-header">Admin Panel</li>
-                    <li><a href="./">Users</a></li>
-                    <li><a href="./">Security</a></li>
-                    <li><a tabindex="-1" href="./">Payments</a></li>
+                    <li><a href="WEB-INF">Users</a></li>
+                    <li><a href="WEB-INF">Security</a></li>
+                    <li><a tabindex="-1" href="WEB-INF">Payments</a></li>
                     <li class="divider"></li>
                     <li><a tabindex="-1" href="sign-in.html">Logout</a></li>
                 </ul>
@@ -193,10 +176,10 @@
 <div class="content">
     <div class="header">
 
-        <h1 class="page-title">用户</h1>
+        <h1 class="page-title">部门</h1>
         <ul class="breadcrumb">
             <li><a href="index.html">Home</a></li>
-            <li class="active">用户</li>
+            <li class="active">部门</li>
         </ul>
 
     </div>
@@ -211,7 +194,7 @@
         </div>
 
 
-        <!--分页表格-->
+        <!--分页table-->
         <div class="panel panel-default">
             <div class="panel-body">
                 <!--<table class="table" id="table_server">-->
@@ -246,7 +229,8 @@
             <hr>
 
             <!-- Purchase a site license to remove this link from the footer: http://www.portnine.com/bootstrap-themes -->
-            <p class="pull-right">A <a href="https://github.com/gitChinwin?tab=repositories" target="_blank">Free Bootstrap
+            <p class="pull-right">A <a href="https://github.com/gitChinwin?tab=repositories" target="_blank">Free
+                Bootstrap
                 Theme</a> by <a href="https://github.com/gitChinwin?tab=repositories" target="_blank">chinWin</a></p>
             <p>© 2017 <a href="https://github.com/gitChinwin?tab=repositories" target="_blank">chinWin</a></p>
         </footer>

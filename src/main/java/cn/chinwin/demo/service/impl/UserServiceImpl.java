@@ -62,7 +62,7 @@ public class UserServiceImpl implements IUserService {
     public Result changeRole(Users user, Users changUser) {
         Result result = null;
         if (user.getUserId() == null || user.getDept() == null || user.getDept().getDeptno() == null) {
-            return new Result<Role>(0, "no parameter enough !", null);
+            return new Result<Role>(0, "user error !", null);
         }
         List<Role> roles = roleDao.findRoleByDeptno(user.getUserId(), user.getDept().getDeptno());
         if (!isContains(roles, changUser.getRoleId())) {

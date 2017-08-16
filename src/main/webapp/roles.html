@@ -38,22 +38,22 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">岗位管理</h4>
+                <h4 class="modal-title" id="myModalLabel">岗位操作</h4>
             </div>
             <div class="modal-body">
-                <input type="hidden" name="roleid" id="changeId">
+                <input type="hidden" name="roleid" id="changeId" >
 
                 <label for="changeRoleCn">岗位中文名:</label>
-                <input type="text" class="form-control" id="changeRoleCn" >
+                <input type="text" class="form-control" id="changeRoleCn" disabled>
                 <br>
                 <label for="changeRoleEn">岗位英文名:</label>
-                <input type="text" class="form-control" id="changeRoleEn" >
+                <input type="text" class="form-control" id="changeRoleEn" disabled>
                 <br>
                 <br>
                 <!--权限多选树-->
-                <label for="priDiv" >权限选择</label>
-                <div class="row" id="priDiv">
-                    <div  id="tree"></div>
+                <label for="priDiv">权限选择</label>
+                <div class="treeview" id="priDiv">
+                    <div id="tree"></div>
                     <div class="col-sm-12">
                         <button type="button" class="btn btn-success" id="btn-check-all">全选</button>
                         <button type="button" class="btn btn-danger" id="btn-uncheck-all">全不选</button>
@@ -180,10 +180,10 @@
 <div class="content">
     <div class="header">
 
-        <h1 class="page-title">岗位管理</h1>
+        <h1 class="page-title">岗位</h1>
         <ul class="breadcrumb">
             <li><a href="index.html">Home</a></li>
-            <li class="active">岗位管理</li>
+            <li class="active">岗位</li>
         </ul>
 
     </div>

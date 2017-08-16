@@ -46,8 +46,13 @@
         WHERE roleid = #{roleid} and roleid != 1
     </update>
 
+    <delete id="delPriList" parameterType="java.lang.Integer">
+        DELETE FROM PRI_ROLE_RELAX WHERE ROLEID = #{roleid}
+    </delete>
 
-
+    <insert id="addPriList" parameterType="java.util.Map">
+        INSERT INTO PRI_ROLE_RELAX(PRIID,ROLEID) VALUES (#{priid},#{roleid})
+    </insert>
 
     <select id="getCount" resultType="java.lang.Integer">
         SELECT COUNT(ROLEID) FROM ROLE WHERE ROLEID!=1

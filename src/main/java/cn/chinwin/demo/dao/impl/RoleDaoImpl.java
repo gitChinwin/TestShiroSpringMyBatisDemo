@@ -16,6 +16,11 @@ public class RoleDaoImpl implements IRoleDao {
     private SqlSessionTemplate session;
 
     @Override
+    public Role findRoleById(Integer roleid) {
+        return session.selectOne("cn.chinwin.demo.pojo.Role.findRoleByRoleId",roleid);
+    }
+
+    @Override
     public List<Role> findRoleByDeptno(int userid, int deptno) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("userid", userid);
@@ -40,5 +45,19 @@ public class RoleDaoImpl implements IRoleDao {
     @Override
     public int updateRole(Role role) {
         return session.update("cn.chinwin.demo.pojo.Role.updateRoleCondition",role);
+    }
+
+    @Override
+    public int delPriList(Integer roleid) {
+        return session.delete("cn.chinwin.demo.pojo.Role.delPriList",roleid);
+
+    }
+
+    @Override
+    public int addPrivilege(Integer priid, Integer roleid) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("priid",priid);
+        map.put("roleid",roleid);
+        return session.insert("cn.chinwin.demo.pojo.Role.addPriList",map);
     }
 }

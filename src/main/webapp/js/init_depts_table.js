@@ -1,7 +1,7 @@
 $(function () {
 
     var t = $("#table_server").bootstrapTable({
-        url: 'http://localhost:8080/uc/getUserSplit',
+        url: 'http://localhost:8080/dc/getDeptSplit',
         method: 'get',
         dataType: "json",
         striped: true,//设置为 true 会有隔行变色效果
@@ -26,46 +26,42 @@ $(function () {
                 ps: params.limit//找多少条
             };
         },
-        idField: "userId",//指定主键列
+        idField: "deptno",//指定主键列
         columns: [
             {
                 title: '#',//表的列名
-                field: 'userId',//json数据中rows数组中的属性名
+                field: 'deptno',//json数据中rows数组中的属性名
                 align: 'center',//水平居中
                 formatter: function (value, row, index) {
                     return index + 1;
                 }
             },
             {
-                title: '账号',
-                field: 'loginName',
+                title: '部门名称',
+                field: 'dname',
                 align: 'center'
             },
             {
-                title: '真实姓名',
-                field: 'realName',
-                align: 'center'
-            },
-            {
-                //EMAIL
-                title: '邮箱',
-                field: 'email',
-                align: 'center'
-            },
-            {
-                //部门名字
-                title: '部门',
-                field: 'dept.dname',//可以直接取到属性里面的属性，赞
-                align: 'center'
-            },
-            {
-                title: '状态',
-                field: 'userStatus',
+                title: '部门描述',
+                field: 'deptDesc',
                 align: 'center',
-                formatter: function (value, row, index) {//自定义显示，这三个参数分别是：value该行的属性，row该行记录，index该行下标
-                    return row.userStatus == 0 ? "正常" : row.userStatus == 1 ? "请假" : "离职";
+                formatter:function (value, row, index) {
+                    if(row.deptDesc==null){
+                        return "空";
+                    }
+                    return row.deptDesc;
                 }
-
+            },
+            {
+                title: '所属上级部门',
+                field: 'parent.deptno',
+                align: 'center',
+                formatter:function (value, row, index) {
+                    if(row.parentid==null){
+                        return "空";
+                    }
+                    return row.parent.dname;
+                }
             },
             {
                 title: '操作',
@@ -93,40 +89,25 @@ $(function () {
         var paaaa = button.data("row"); // 解析出whatever内容
         var row = JSON.parse(paaaa);
         //为模态框的input赋值
-        $("#changedUserId").val(row.userId);
-        $("#changeLoginName").val(row.loginName);
-        $("#changeRealName").val(row.realName);
-        $("#changeEmail").val(row.email);
-        // 设置职工状态下拉框，并初始化选中值
-        var $changeStatus = $("#changeStatus option");
-        for (var i = 0; i < $changeStatus.length; i++) {
-            var $op = $changeStatus[i];
-            var value = $op.value;
-            if (value == row.userStatus) {
-                $op.setAttribute("selected", "selected");//此处用原生js设置属性= =，不知道为啥jQuery会报错
-            }
-        }
-        if (row.dept != null && row.dept.dname != null) {
-            $("#changeDeptno").val(row.dept.dname);
-        }else{
-            $("#changeDeptno").val("空");
-        }
-
-        getRoles(row.roleId);//调用getRoles()去后台查岗位
+        $("#changedDeptNo").val(row.deptno);
+        $("#changeDeptName").val(row.dname);
+        $("#changeDeptDesc").val(row.depeDesc);
+        getDepts(row.parentid);//调用getRoles()去后台查岗位
     });
 
 });
 
 //模态框弹出时事件触发时进入此函数
-function getRoles(rid) {
+function getDepts(parentid) {
     var item = sessionStorage.getItem("user");
     var user = JSON.parse(item);
     var current_uid;
     if (user == null || (current_uid = user.userId) == null) {
         window.location.href = "sign-in.html";
+        $('#myModal').modal('hide');
     }
     var setting = {
-        url: "uc/preChangeRole",
+        url: "dc/preChangeDept",
         type: "post",
         data: "",
         success: function (data) {
@@ -135,18 +116,20 @@ function getRoles(rid) {
                 alert("服务器跑到火星啦！");
                 return;
             }
-            var roleList = data.result;
+            var deptList = data.result;
             var str = "";
-            for (var i = 0; i < roleList.length; i++) {
-                var role = roleList[i];
+            for (var i = 0; i < deptList.length; i++) {
+                var d = deptList[i];
                 var selected = "";
-                if (parseInt(role.roleid) === parseInt(rid)) {
-                    selected = "selected"
+                var icss = "";
+                if (parseInt(d.deptno) === parseInt(parentid)) {
+                    selected = "selected";
+                    icss = " style='color: red' ";
                 }
-                str += "<option value='" + role.roleid + "'  " + selected + ">" + role.roleCn + "</option>";
+                str += "<option value='" + d.deptno + "' " + selected + " " + icss + ">" + d.dname + "</option>";
             }
-            $("#roleSelect").empty();
-            $("#roleSelect").append($(str));
+            $("#deptSelect").empty();
+            $("#deptSelect").append($(str));
         },
         error: function (res) {
             alert("服务器跑到火星啦！");
@@ -156,21 +139,19 @@ function getRoles(rid) {
 }
 
 //模态框确定按钮事件触发函数
-function changeUser() {
+function changeDept() {
 
-    var serialize = $("#changeRoleForm").serialize();
-    var uid = $("#changedUserId").val();
-    var rid = $("#roleSelect option[selected]").val();
+    var serialize = $("#changeDeptForm").serialize();
     var setting = {
-        url: "uc/changeRole",
+        url: "dc/updateDept",
         type: "post",
         data: serialize,
         success: function (data) {
             if (data.code == 0) {
                 $('#myModal').modal('hide');
-                showTips(false,data.msg,$("#table_server"));
-            }else {
-                showTips(true,data.msg,$("#table_server"));
+                showTips(false, data.msg, $("#table_server"));
+            } else {
+                showTips(true, data.msg, $("#table_server"));
                 $('#myModal').modal('hide');
                 setTimeout(function () {
                     window.location.reload();
@@ -178,10 +159,10 @@ function changeUser() {
             }
         },
         error: function (res) {
-            showTips(false,res.code,$("#table_server"));
+            showTips(false, res.code, $("#table_server"));
             $('#myModal').modal('hide');
         }
-    }
+    };
 
     $.ajax(setting);
 }
@@ -199,3 +180,6 @@ function showTips(status, msg, parent) {
     }.bind($tip), 3000)
 
 }
+
+
+

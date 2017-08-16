@@ -60,29 +60,40 @@ public class RoleController {
 
     @RequestMapping(value = "updateRole")
     @ResponseBody
-    public String updateRole(@RequestBody Role role) {
-        System.out.println("...");
-        if (role != null) {
-            List<Privilege> priList = role.getPriList();
-            for (Privilege privilege : priList) {
-                System.out.println(privilege.getPriid());
-            }
+    public Result updateRole(@RequestBody Role role) {
+        Result result = null;
+        if (role.getRoleid() == null) {
+            result = new Result(0, "参数不足", null);
         }
-        return "suc";
+        try {
+            boolean flag = roleService.updataRoleIncludePrivilege(role);
+            if (flag) {
+
+                result = new Result(1, "suc", null);
+            } else {
+                result = new Result(0, "要先启用角色才允许修改", null);
+            }
+        } catch (RuntimeException e) {
+            result = new Result(0, "error", null);
+        }
+        return result;
     }
+
+
+
 
     @RequestMapping(value = "changeRoleStatus")
     @ResponseBody
     public Result changeRoleStatus(@RequestBody Role role) {
         Result result;
-        if(role.getRoleid()==null){
-            result = new Result(0,"参数不足！",null);
+        if (role.getRoleid() == null) {
+            result = new Result(0, "参数不足！", null);
         }
-        boolean flag = roleService.updateRole(role);
-        if(flag){
-            result = new Result(1,"suc",null);
-        }else{
-            result = new Result(0,"nullPointException",null);
+        boolean flag = roleService.updateRoleStatus(role);
+        if (flag) {
+            result = new Result(1, "suc", null);
+        } else {
+            result = new Result(0, "nullPointException", null);
         }
         return result;
     }
