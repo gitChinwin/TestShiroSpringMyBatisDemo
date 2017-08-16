@@ -270,9 +270,9 @@ function changeRole() {
         success: function (data) {
             if (data.code == 0) {
                 $('#myModal').modal('hide');
-                showTips(false,data.msg,$("#table_server"));
-            }else {
-                showTips(true,data.msg,$("#table_server"));
+                showTips(false, data.msg, $("#table_server"));
+            } else {
+                showTips(true, data.msg, $("#table_server"));
                 $('#myModal').modal('hide');
                 setTimeout(function () {
                     window.location.reload();
@@ -280,7 +280,8 @@ function changeRole() {
             }
         },
         error: function (res) {
-            showTips(false,res.code,$("#table_server"));
+            $('#myModal').modal('hide');
+            showTips(false, res.code, $("#table_server"));
         }
     });
 
@@ -313,13 +314,13 @@ function changeStatus(t) {
                 $(t).text(str);
                 $(t).val(value);
                 $(t).attr("class", cla);
-                showTips(true,data.msg,$("#table_server"));
+                showTips(true, data.msg, $("#table_server"));
             } else {
-                showTips(false,data.msg,$("#table_server"));
+                showTips(false, data.msg, $("#table_server"));
             }
         },
         error: function (res) {
-            showTips(false,"error",$("#table_server"));
+            showTips(false, "error", $("#table_server"));
         }
     })
 }

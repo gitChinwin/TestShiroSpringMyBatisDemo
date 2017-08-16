@@ -20,7 +20,7 @@ public class DeptServiceImpl implements IDeptService {
     public List<Dept> getDeptSplit(Integer start, Integer ps) {
         List<Dept> deptSplit = deptDao.getDeptSplit(start, ps);
         for (Dept dept : deptSplit) {
-            if(dept.getParentid()!=null){
+            if (dept.getParentid() != 0) {
                 Dept deptById = deptDao.findDeptById(dept.getParentid());
                 dept.setParent(deptById);
             }
@@ -37,7 +37,7 @@ public class DeptServiceImpl implements IDeptService {
     @Transactional
     public boolean updateDept(Dept dept) {
         int update = deptDao.updateDept(dept);
-        if(update<0){
+        if (update < 0) {
             throw new RuntimeException();
         }
         return true;
@@ -47,7 +47,7 @@ public class DeptServiceImpl implements IDeptService {
     @Transactional
     public boolean addDept(Dept dept) {
         int add = deptDao.addDept(dept);
-        if(add<0){
+        if (add < 0) {
             throw new RuntimeException();
         }
         return true;

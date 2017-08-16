@@ -100,15 +100,17 @@ $(function () {
         // 设置职工状态下拉框，并初始化选中值
         var $changeStatus = $("#changeStatus option");
         for (var i = 0; i < $changeStatus.length; i++) {
-            var $op = $changeStatus[i];
-            var value = $op.value;
+            var op = $changeStatus[i];
+            var value = $(op).val();
             if (value == row.userStatus) {
-                $op.setAttribute("selected", "selected");//此处用原生js设置属性= =，不知道为啥jQuery会报错
+                $(op).attr("selected");//此处用原生js设置属性= =，不知道为啥jQuery会报错
+                $(op).css("color", "red");
+                $(op).text($(op).text() + "(当前状态)");
             }
         }
         if (row.dept != null && row.dept.dname != null) {
             $("#changeDeptno").val(row.dept.dname);
-        }else{
+        } else {
             $("#changeDeptno").val("空");
         }
 
@@ -140,10 +142,14 @@ function getRoles(rid) {
             for (var i = 0; i < roleList.length; i++) {
                 var role = roleList[i];
                 var selected = "";
+                var icss = "";
+                var tip = "";
                 if (parseInt(role.roleid) === parseInt(rid)) {
-                    selected = "selected"
+                    selected = "selected";
+                    icss = " style='color: red' ";
+                    tip = "(当前岗位)";
                 }
-                str += "<option value='" + role.roleid + "'  " + selected + ">" + role.roleCn + "</option>";
+                str += "<option value='" + role.roleid + "'  " + selected + icss + ">" + role.roleCn + tip + "</option>";
             }
             $("#roleSelect").empty();
             $("#roleSelect").append($(str));
@@ -168,9 +174,9 @@ function changeUser() {
         success: function (data) {
             if (data.code == 0) {
                 $('#myModal').modal('hide');
-                showTips(false,data.msg,$("#table_server"));
-            }else {
-                showTips(true,data.msg,$("#table_server"));
+                showTips(false, data.msg, $("#table_server"));
+            } else {
+                showTips(true, data.msg, $("#table_server"));
                 $('#myModal').modal('hide');
                 setTimeout(function () {
                     window.location.reload();
@@ -178,7 +184,7 @@ function changeUser() {
             }
         },
         error: function (res) {
-            showTips(false,res.code,$("#table_server"));
+            showTips(false, res.code, $("#table_server"));
             $('#myModal').modal('hide');
         }
     }

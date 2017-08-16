@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import java.util.List;
 
-@Controller("dc")
+@Controller
+@RequestMapping("dc")
 public class DeptController {
 
 
@@ -21,7 +22,7 @@ public class DeptController {
 
     @RequestMapping("getDeptSplit")
     @ResponseBody
-    public TableSplitResult getDeptSplit(Integer cp,Integer ps){
+    public TableSplitResult getDeptSplit(Integer cp, Integer ps) {
         if (cp == null) {
             cp = 0;
         }
@@ -37,23 +38,23 @@ public class DeptController {
 
     @RequestMapping("preChangeDept")
     @ResponseBody
-    public Result preChangeDept(){
+    public Result preChangeDept() {
         List<Dept> deptList = deptService.getAllDept();
-        return new Result(1,"suc",deptList);
+        return new Result(1, "suc", deptList);
     }
 
     @RequestMapping("updateDept")
     @ResponseBody
-    public Result updateDept(Dept dept){
+    public Result updateDept(Dept dept) {
         Result result;
-        if(dept.getDeptno()==null){
-            result = new Result(0,"id不能为空！",null);
+        if (dept.getDeptno() == null) {
+            result = new Result(0, "id不能为空！", null);
         }
         boolean flag = deptService.updateDept(dept);
-        if(flag){
-            result = new Result(1,"suc！",null);
-        }else{
-            result = new Result(0,"id不能为空！",null);
+        if (flag) {
+            result = new Result(1, "suc！", null);
+        } else {
+            result = new Result(0, "id不能为空！", null);
         }
         return result;
     }
@@ -61,13 +62,17 @@ public class DeptController {
 
     @RequestMapping("addDept")
     @ResponseBody
-    public Result addDept(Dept dept){
+    public Result addDept(Dept dept) {
         Result result;
+        if (dept.getDname() == null || dept.getDname() == "") {
+
+            result = new Result(1, "部门名称不能为空!", null);
+        }
         boolean flag = deptService.addDept(dept);
-        if(flag){
-            result = new Result(1,"suc！",null);
-        }else{
-            result = new Result(0,"id不能为空！",null);
+        if (flag) {
+            result = new Result(1, "suc！", null);
+        } else {
+            result = new Result(0, "fail！", null);
         }
         return result;
     }

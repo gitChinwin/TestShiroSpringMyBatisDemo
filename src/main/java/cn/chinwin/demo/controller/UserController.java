@@ -3,14 +3,11 @@ package cn.chinwin.demo.controller;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
-import cn.chinwin.demo.pojo.Privilege;
 import cn.chinwin.demo.pojo.Result;
 import cn.chinwin.demo.pojo.TableSplitResult;
 import cn.chinwin.demo.pojo.Users;
 import cn.chinwin.demo.service.IUserService;
-import com.alibaba.fastjson.JSON;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;

@@ -22,8 +22,8 @@ $(function () {
         sidePagination: "server", //服务端处理分页
         queryParams: function (params) {//自定义参数，这里的参数是传给后台的，我这是是分页用的
             return {//这里的params是table提供的
-                cp: params.offset,//从数据库第几条记录开始
-                ps: params.limit//找多少条
+                cp: parseInt(params.offset),//从数据库第几条记录开始
+                ps: parseInt(params.limit)//找多少条
             };
         },
         idField: "deptno",//指定主键列
@@ -45,8 +45,8 @@ $(function () {
                 title: '部门描述',
                 field: 'deptDesc',
                 align: 'center',
-                formatter:function (value, row, index) {
-                    if(row.deptDesc==null){
+                formatter: function (value, row, index) {
+                    if (row.deptDesc == null||row.deptDesc=="") {
                         return "空";
                     }
                     return row.deptDesc;
@@ -56,8 +56,8 @@ $(function () {
                 title: '所属上级部门',
                 field: 'parent.deptno',
                 align: 'center',
-                formatter:function (value, row, index) {
-                    if(row.parentid==null){
+                formatter: function (value, row, index) {
+                    if (row.parentid == 0) {
                         return "空";
                     }
                     return row.parent.dname;
@@ -92,7 +92,7 @@ $(function () {
         $("#changedDeptNo").val(row.deptno);
         $("#changeDeptName").val(row.dname);
         $("#changeDeptDesc").val(row.depeDesc);
-        getDepts(row.parentid);//调用getRoles()去后台查岗位
+        getDepts(row.parentid);//调用getRoles()
     });
 
 });
@@ -106,6 +106,18 @@ function getDepts(parentid) {
         window.location.href = "sign-in.html";
         $('#myModal').modal('hide');
     }
+    if (parentid != 0) {
+        $("#deptSelect").prop("disabled", "");
+        initParentSelect(parentid, $("#deptSelect"));
+    } else {
+        $("#deptSelect").empty();
+        $("#deptSelect").append($("<option value=''>空</option>"));
+        $("#deptSelect").prop("disabled", "disabled");
+    }
+}
+
+//初始化下拉框
+function initParentSelect(parentid, selector) {
     var setting = {
         url: "dc/preChangeDept",
         type: "post",
@@ -118,18 +130,23 @@ function getDepts(parentid) {
             }
             var deptList = data.result;
             var str = "";
+
             for (var i = 0; i < deptList.length; i++) {
                 var d = deptList[i];
                 var selected = "";
                 var icss = "";
-                if (parseInt(d.deptno) === parseInt(parentid)) {
+                var tip = "";
+
+                if (parentid != null && parseInt(d.deptno) === parseInt(parentid)) {
                     selected = "selected";
                     icss = " style='color: red' ";
+                    tip = "(当前所属上级部门)"
                 }
-                str += "<option value='" + d.deptno + "' " + selected + " " + icss + ">" + d.dname + "</option>";
+                str += "<option value='" + d.deptno + "' " + selected + " " + icss + ">" + d.dname + tip + "</option>";
             }
-            $("#deptSelect").empty();
-            $("#deptSelect").append($(str));
+
+            $(selector).empty();
+            $(selector).append($(str));
         },
         error: function (res) {
             alert("服务器跑到火星啦！");
@@ -138,7 +155,8 @@ function getDepts(parentid) {
     $.ajax(setting);
 }
 
-//模态框确定按钮事件触发函数
+
+//修改部门信息模态框确定按钮事件触发函数
 function changeDept() {
 
     var serialize = $("#changeDeptForm").serialize();
@@ -181,5 +199,42 @@ function showTips(status, msg, parent) {
 
 }
 
+//新增部门信息模态框弹出时出发的事件
+$(function () {
+    $("#addDeptModal").on('show.bs.modal', function () {
+        initParentSelect(null, $("#addDeptSelect"));
+    });
+});
 
+
+//新增部门信息的保存按钮的点击的事件
+function addDept() {
+
+    if ($("#addDeptName").val() == null || $("#addDeptName").val() == "") {
+        showTips(false, "部门名称不能为空", $("#table_server"));
+        return false;
+    }
+
+    var serialize = $("#addDeptForm").serialize();
+    $.ajax({
+        url: "dc/addDept",
+        type: "post",
+        data: serialize,
+        success: function (data) {
+            if (data.code == 0) {
+                showTips(false, data.msg, $("#table_server"));
+            } else {
+                showTips(true, data.msg, $("#table_server"));
+                $('#addDeptModal').modal('hide');
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000)
+            }
+        },
+        error: function (res) {
+            $('#addDeptModal').modal('hide');
+            showTips(false, res.code, $("#table_server"));
+        }
+    });
+}
 

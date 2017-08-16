@@ -21,13 +21,13 @@
     <script src="lib/bootstrap_table/bootstrap-table-zh-CN.js"></script>
     <script type="text/javascript" src="js/getLeftMenu.js"></script>
 
-    <script type="text/javascript" src="js/init_users_table.js"></script>
+    <script type="text/javascript" src="js/init_depts_table.js"></script>
 
 </head>
 <body class=" theme-blue">
 
 
-<!-- 模态弹出框 -->
+<!-- 修改部门信息的模态弹出框 -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -46,11 +46,9 @@
                         <label for="changeDeptDesc">部门描述:</label>
                         <input type="text" class="form-control" id="changeDeptDesc" name="deptDesc">
                         <br>
-                        <select class="form-control" id="deptSelect" name="parentid">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
+                        <label for="deptSelect">所属上级部门:</label>
+                        <select class="form-control" id="deptSelect" name="parentid" >
+
                         </select>
                         <br>
                         <br>
@@ -60,6 +58,41 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" onclick="changeDept()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 添加部门的模态弹出框-->
+<div class="modal fade" id="addDeptModal" tabindex="-1" role="dialog" aria-labelledby="addDeptModalLabel">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="addDeptModalLabel">新增部门</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <form id="addDeptForm">
+                        <label for="addDeptName">部门名称:</label>
+                        <input type="text" class="form-control" id="addDeptName" name="dname" >
+                        <br>
+                        <label for="addDeptDesc">部门描述:</label>
+                        <input type="text" class="form-control" id="addDeptDesc" name="deptDesc">
+                        <br>
+
+                        <label for="addDeptSelect">所属上级部门:</label>
+                        <select class="form-control" id="addDeptSelect" name="parentid">
+                            <option>空</option>
+                        </select>
+                        <br>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="addDept()">Save changes</button>
             </div>
         </div>
     </div>
@@ -164,7 +197,6 @@
 
     </div>
 </div>
-</div>
 
 
 <div class="sidebar-nav">
@@ -186,7 +218,7 @@
     <div class="main-content">
 
         <div class="btn-toolbar list-toolbar">
-            <button class="btn btn-primary"><i class="fa fa-plus"></i> New User</button>
+            <button class="btn btn-primary"  data-toggle='modal' data-target='#addDeptModal'><i class="fa fa-plus"></i> New User</button>
             <button class="btn btn-default">Import</button>
             <button class="btn btn-default">Export</button>
             <div class="btn-group">
@@ -203,27 +235,6 @@
 
             </div>
         </div>
-
-        <!--<div class="modal small fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"-->
-        <!--aria-hidden="true">-->
-        <!--<div class="modal-dialog">-->
-        <!--<div class="modal-content">-->
-        <!--<div class="modal-header">-->
-        <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>-->
-        <!--<h3 id="myModalLabel">Delete Confirmation</h3>-->
-        <!--</div>-->
-        <!--<div class="modal-body">-->
-        <!--<p class="error-text"><i class="fa fa-warning modal-icon"></i>Are you sure you want to delete-->
-        <!--the user?<br>This cannot be undone.</p>-->
-        <!--</div>-->
-        <!--<div class="modal-footer">-->
-        <!--<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>-->
-        <!--<button class="btn btn-danger" data-dismiss="modal">Delete</button>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--</div>-->
-
 
         <footer>
             <hr>

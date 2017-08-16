@@ -33,7 +33,7 @@
 		<if test="parentid!=null"> ,PARENTID</if>
 		)
 		VALUES(
-		#{deptno}
+		#{dname}
 		<if test="deptDesc!=null"> ,#{deptDesc}</if>
 		<if test="parentid!=null"> ,#{parentid}</if>
 		)

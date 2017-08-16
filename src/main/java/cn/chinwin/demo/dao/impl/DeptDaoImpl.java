@@ -30,7 +30,7 @@ public class DeptDaoImpl implements IDeptDao{
 
     @Override
     public int updateDept(Dept dept) {
-        return session.update("cn.chinwin.demo.pojo.Dept.deptSplit.updateDeptInfo",dept);
+        return session.update("cn.chinwin.demo.pojo.Dept.updateDeptInfo",dept);
     }
 
     @Override
