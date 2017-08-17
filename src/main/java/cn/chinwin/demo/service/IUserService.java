@@ -10,6 +10,8 @@ public interface IUserService {
 
     Users islogin(Users user);
 
+    List<String> getPermissionsByUserName(String loginname);
+
     List<Users> getUserSplit(int cp, int ps, int userid, int deptno);
 
     int getCount(int userid, int deptno);

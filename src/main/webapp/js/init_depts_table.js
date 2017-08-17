@@ -46,7 +46,7 @@ $(function () {
                 field: 'deptDesc',
                 align: 'center',
                 formatter: function (value, row, index) {
-                    if (row.deptDesc == null||row.deptDesc=="") {
+                    if (row.deptDesc == null || row.deptDesc == "") {
                         return "空";
                     }
                     return row.deptDesc;
@@ -111,7 +111,7 @@ function getDepts(parentid) {
         initParentSelect(parentid, $("#deptSelect"));
     } else {
         $("#deptSelect").empty();
-        $("#deptSelect").append($("<option value=''>空</option>"));
+        $("#deptSelect").append($("<option value='0'>空</option>"));
         $("#deptSelect").prop("disabled", "disabled");
     }
 }
@@ -123,20 +123,22 @@ function initParentSelect(parentid, selector) {
         type: "post",
         data: "",
         success: function (data) {
-
+            var deptno = $("#changedDeptNo").val();
             if (data.code == 0) {
                 alert("服务器跑到火星啦！");
                 return;
             }
             var deptList = data.result;
-            var str = "";
+            var str = "<option value='0'>空</option>";
 
             for (var i = 0; i < deptList.length; i++) {
                 var d = deptList[i];
                 var selected = "";
                 var icss = "";
                 var tip = "";
-
+                if (parseInt(d.deptno) == parseInt(deptno)) {
+                    continue;
+                }
                 if (parentid != null && parseInt(d.deptno) === parseInt(parentid)) {
                     selected = "selected";
                     icss = " style='color: red' ";

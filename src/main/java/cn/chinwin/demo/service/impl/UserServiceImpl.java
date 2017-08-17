@@ -3,6 +3,7 @@ package cn.chinwin.demo.service.impl;
 import cn.chinwin.demo.dao.IPrivilegeDao;
 import cn.chinwin.demo.dao.IRoleDao;
 import cn.chinwin.demo.dao.IUserDao;
+import cn.chinwin.demo.pojo.Privilege;
 import cn.chinwin.demo.pojo.Result;
 import cn.chinwin.demo.pojo.Role;
 import cn.chinwin.demo.pojo.Users;
@@ -11,6 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.PipedReader;
+import java.security.PrivateKey;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,6 +39,29 @@ public class UserServiceImpl implements IUserService {
             u.getRole().setPriList(privilegeDao.findAllPrivilege());
         }
         return u;
+    }
+
+    @Override
+    public List<String> getPermissionsByUserName(String loginname) {
+        List<String> priUrls = null;
+        Users user = this.islogin(new Users(loginname));
+        List<Privilege> priList = user.getRole().getPriList();
+        if (priList != null && !priList.isEmpty()) {
+            priUrls = new ArrayList<>();
+            for (Privilege p : priList) {
+                if (p == null) {
+                    continue;
+                }
+                String[] split = p.getPriUrl().split(";");
+                if (split.length > 0) {
+                    for (int i = 0; i < split.length; i++) {
+                        String url = split[i];
+                        priUrls.add(url);
+                    }
+                }
+            }
+        }
+        return priUrls;
     }
 
     @Override

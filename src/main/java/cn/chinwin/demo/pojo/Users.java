@@ -15,6 +15,13 @@ public class Users implements Serializable {
 	private Integer roleId;
 	private Role role;
 
+	public Users() {
+	}
+
+	public Users(String loginName) {
+		this.loginName = loginName;
+	}
+
 	public Integer getUserId() {
 		return userId;
 	}
