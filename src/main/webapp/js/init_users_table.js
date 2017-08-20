@@ -1,7 +1,7 @@
 $(function () {
 
     var t = $("#table_server").bootstrapTable({
-        url: 'http://localhost:8080/uc/getUserSplit',
+        url: 'uc/getUserSplit',
         method: 'get',
         dataType: "json",
         striped: true,//设置为 true 会有隔行变色效果

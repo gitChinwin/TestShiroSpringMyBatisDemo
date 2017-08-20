@@ -2,7 +2,7 @@ $(function () {
     var obj = sessionStorage.getItem("user");
     var user = JSON.parse(obj);
     if (user === null) {
-        window.location.href = "sign-in.html";
+        window.location.href = "/sign-in.html";
     }
     $("#myName").html("<span class='glyphicon glyphicon-user padding-right-small'" +
         "style = 'position:relative;top: 3px;' ></span >" + user.loginName + "<i class='fa fa-caret-down'></i>");

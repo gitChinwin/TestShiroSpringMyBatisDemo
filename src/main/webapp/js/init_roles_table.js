@@ -1,7 +1,8 @@
+
 $(function () {
 
     var t = $("#table_server").bootstrapTable({
-        url: 'http://localhost:8080/rc/getRoleSplit',
+        url: 'rc/getRoleSplit',
         method: 'get',
         dataType: "json",
         striped: true,//设置为 true 会有隔行变色效果
@@ -263,7 +264,7 @@ function changeRole() {
 
     $.ajax({
         type: "post",
-        url: "/rc/updateRole",
+        url: "rc/updateRole",
         data: JSON.stringify(role),
         dataType: "json",
         contentType: "application/json;charset=utf-8",
@@ -305,7 +306,7 @@ function changeStatus(t) {
     role.roleStatus = value;
     $.ajax({
         type: "post",
-        url: "/rc/changeRoleStatus",
+        url: "rc/changeRoleStatus",
         data: JSON.stringify(role),
         dataType: "json",
         contentType: "application/json;charset=utf-8",
