@@ -54,4 +54,19 @@
     </update>
 
 
+    <!--测试用-->
+    <select id="getUserById" parameterType="java.lang.Integer" resultType="cn.chinwin.demo.pojo.Users">
+        SELECT * FROM USERS WHERE USERID = #{userId} FOR UPDATE
+    </select>
+
+    <select id="getUserByIdWithoutLock" parameterType="java.lang.Integer" resultType="cn.chinwin.demo.pojo.Users">
+        SELECT * FROM USERS WHERE USERID = #{userId}
+    </select>
+
+    <update id="updateLoginName" parameterType="java.util.Map" >
+        UPDATE USERS SET LOGINNAME = #{loginName}
+        WHERE USERID = #{userId}
+    </update>
+    <!--测试用-->
+
 </mapper>

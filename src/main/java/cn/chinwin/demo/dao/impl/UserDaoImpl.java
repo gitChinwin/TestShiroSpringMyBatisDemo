@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Repository
@@ -44,4 +45,23 @@ public class UserDaoImpl implements IUserDao {
         int update = session.update("cn.chinwin.demo.pojo.Users.changeRole", user);
         return update > 0 ;
     }
+
+    /*****************    测试用       ****************/
+    @Override
+    public Users get(Integer userId) {
+        return session.selectOne("cn.chinwin.demo.pojo.Users.getUserById", userId);
+    }
+
+    @Override
+    public Users getWithoutLock(Integer userId) {
+        return session.selectOne("cn.chinwin.demo.pojo.Users.getUserByIdWithoutLock", userId);
+    }
+
+    @Override
+    public boolean updateLoginName(Map map) {
+        int update = session.update("cn.chinwin.demo.pojo.Users.updateLoginName", map);
+        return update > 0 ;
+    }
+    /*****************    测试用       ****************/
+
 }
